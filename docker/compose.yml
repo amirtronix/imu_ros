@@ -1,0 +1,25 @@
+services:
+  ros:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ipc: host  
+    tty: true
+    container_name: "imu_container"
+    network_mode: "host"
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+
+    volumes:
+        - type: bind
+          source: ../imu_ros
+          target: /home/user/catkin_ws/src/imu_ros
+      
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
